@@ -12,14 +12,25 @@
         public function validateLogin()
         {
             $conn = Connection::getconn();
-            var_dump($conn);
+            $sql = 'SELECT * FROM user WHERE email = :email';
 
-            //conectar  no db
-             
-            // selec user mesmo email
-            //conferir senha
-            //se tiver tudo ok  criar session tela dashboard
-            // se tiver açgum erro redirecionar tela inicial
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':email',$this->email);
+            $stmt->execute();
+
+            if($stmt->rowCount()) {
+                $result = $stmt->fetch();
+
+                if($result['password'] === $this->password);{
+                    $_SESSION['usr'] = $result['id'];
+
+                    return true;
+                }
+                
+            }
+            
+            throw new \Exception("Login Invalido");
+
         }
 
         public function setEmail($email){
