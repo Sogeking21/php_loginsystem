@@ -4,7 +4,16 @@ class DashboardController
 {
     public function index()
     {
-        echo 'Logado com sucesso <a href="http://localhost/php_loginsystem/dashboard/logout">fazer logout</a>';
+        $loader = new \Twig\Loader\FilesystemLoader('app/view/');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/path/to/compilation_cache',
+            'auto_reload' =>true, 
+        ]);
+        
+        $template = $twig->load('dashboard.html');
+            $parameters['name_user'] = $_SESSION['usr']['name_user'];
+    
+        return $template->render($parameters);
     }
 
     public function logout()
